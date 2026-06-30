@@ -1,0 +1,21 @@
+{
+  "name": "royal-king-insurance",
+  "private": true,
+  "scripts": {
+    "dev:client": "npm run dev --prefix frontend",
+    "dev:server": "npm run dev --prefix server",
+    "kill-port": "powershell -Command \"$p = netstat -ano | Select-String ':5000 ' | ForEach-Object { ($_ -split '\\s+')[-1] } | Select-Object -First 1; if ($p) { taskkill /PID $p /F }\"",
+    "dev": "npm run kill-port && concurrently --kill-others \"npm run dev:server\" \"wait-on tcp:5000 && npm run dev:client\"",
+    "build:client": "npm run build --prefix frontend",
+    "build:server": "npm run build --prefix server",
+    "build": "npm run build:client && npm run build:server",
+    "start": "node server/src/index.js",
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix server",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.7.3",
+    "wait-on": "^9.0.10"
+  }
+}

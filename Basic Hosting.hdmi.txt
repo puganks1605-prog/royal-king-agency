@@ -1,0 +1,18 @@
+Basic Hosting
+
+✅ Lower cost (₹1,500–₹4,000/year)
+✅ Suitable for small personal websites or portfolios
+❌ Slower performance when many visitors use the site
+❌ Limited resources and support
+
+Professional Hosting
+
+✅ Faster loading speed
+✅ Better uptime and reliability
+✅ More storage and bandwidth
+✅ Better security for customer inquiries and contact forms
+✅ Easier to grow as the business gets more clients
+
+Recommendation
+
+If the insurance agency is a real business that will receive customer inquiries, policy requests, or claim assistance requests through the website, choose Professional Hosting.

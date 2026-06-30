@@ -1,0 +1,7 @@
+Steps: Log In as the Admin
+
+
+step 1:Go to the login page: http://localhost:8080/auth
+step 2:In the Email field, type: admin@royalking.com
+step 3:In the Password field, type: adminpassword123
+Click Sign In.
