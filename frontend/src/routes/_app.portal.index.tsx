@@ -102,10 +102,11 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: number; 
 
 export function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    pending: "bg-warning/15 text-warning-foreground border-warning/40",
-    quoted: "bg-primary/15 text-primary border-primary/30",
-    closed: "bg-muted text-muted-foreground border-border",
-    rejected: "bg-destructive/15 text-destructive border-destructive/30",
+    pending:  "bg-warning/15 text-warning-foreground border-warning/40",
+    quoted:   "bg-primary/15 text-primary border-primary/30",
+    approved: "bg-green-500/15 text-green-700 border-green-500/30",
+    declined: "bg-destructive/15 text-destructive border-destructive/30",
+    closed:   "bg-muted text-muted-foreground border-border",
   };
   return <Badge variant="outline" className={map[status] ?? ""}>{status}</Badge>;
 }

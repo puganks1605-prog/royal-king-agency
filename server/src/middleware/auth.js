@@ -1,4 +1,7 @@
 import jwt from "jsonwebtoken";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) console.warn("[AUTH] WARNING: JWT_SECRET env var not set! Using insecure fallback.");
+const SECRET = JWT_SECRET || "rki_fallback_secret_change_in_production_2024";
 
 export const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +12,7 @@ export const authenticate = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "supersecret");
+    const decoded = jwt.verify(token, SECRET);
     req.user = {
       id: decoded.id,
       email: decoded.email,

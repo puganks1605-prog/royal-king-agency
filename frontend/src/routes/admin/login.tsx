@@ -9,7 +9,7 @@ import { Logo } from "@/components/site/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
-import { ShieldAlert, Lock, ArrowLeft } from "lucide-react";
+import { ShieldAlert, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/admin/login")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -35,6 +35,7 @@ function AdminLoginPage() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/admin/login" });
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
@@ -109,15 +110,25 @@ function AdminLoginPage() {
               <Label htmlFor="pwd" className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Security Password
               </Label>
-              <Input
-                id="pwd"
-                name="password"
-                type="password"
-                placeholder="••••••••••••"
-                required
-                minLength={6}
-                className="border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus-visible:ring-red-500/40"
-              />
+              <div className="relative">
+                <Input
+                  id="pwd"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••••••"
+                  required
+                  minLength={6}
+                  className="border-slate-800 bg-slate-950/80 pr-10 text-white placeholder-slate-600 focus-visible:ring-red-500/40"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-white"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
             <Button

@@ -13,13 +13,20 @@ import User from "./models/User.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load env variables
-dotenv.config({ path: path.join(__dirname, "../../.env") });
-dotenv.config(); // fallback to local server .env
+// Load env variables — try project root .env first, then server/.env
+const rootEnvPath = path.resolve(__dirname, "../../.env");
+const serverEnvPath = path.resolve(__dirname, "../../server/.env");
+dotenv.config({ path: rootEnvPath });
+dotenv.config({ path: serverEnvPath });
+dotenv.config(); // fallback: .env in cwd
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://pugankumar2008_db_user:DxTyprY9vV8WJ9kw@cluster0.dcaeswj.mongodb.net/?appName=Cluster0";
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
+  "mongodb://pugankumar2008_db_user:DxTyprY9vV8WJ9kw@ac-ssy0jjw-shard-00-00.dcaeswj.mongodb.net:27017,ac-ssy0jjw-shard-00-01.dcaeswj.mongodb.net:27017,ac-ssy0jjw-shard-00-02.dcaeswj.mongodb.net:27017/royal_king_insurance?ssl=true&replicaSet=atlas-dtamwn-shard-0&authSource=admin&retryWrites=true&w=majority";
+
+console.log("[ENV] MONGODB_URI loaded:", MONGODB_URI ? "YES" : "NO");
 
 // Middleware
 app.use(cors({
