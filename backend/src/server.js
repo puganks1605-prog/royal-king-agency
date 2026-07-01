@@ -1,0 +1,62 @@
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import bcrypt from "bcryptjs";
+import User from "./models/User.js";
+import app from "./app.js";
+
+// Construct __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load env variables
+const backendEnvPath = path.resolve(__dirname, "../.env");
+const rootEnvPath = path.resolve(__dirname, "../../.env");
+dotenv.config({ path: backendEnvPath });
+dotenv.config({ path: rootEnvPath });
+dotenv.config();
+
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
+  "mongodb://pugankumar2008_db_user:DxTyprY9vV8WJ9kw@ac-ssy0jjw-shard-00-00.dcaeswj.mongodb.net:27017,ac-ssy0jjw-shard-00-01.dcaeswj.mongodb.net:27017,ac-ssy0jjw-shard-00-02.dcaeswj.mongodb.net:27017/royal_king_insurance?ssl=true&replicaSet=atlas-dtamwn-shard-0&authSource=admin&retryWrites=true&w=majority";
+
+console.log("[ENV] MONGODB_URI loaded:", MONGODB_URI ? "YES" : "NO");
+
+// Seed Admin User if not exists
+async function seedAdmin() {
+  try {
+    const adminExists = await User.findOne({ role: "admin" });
+    if (!adminExists) {
+      console.log("[MongoDB] Seeding default admin user...");
+      const hashedPassword = await bcrypt.hash("adminpassword123", 10);
+      const defaultAdmin = new User({
+        email: "admin@royalking.com",
+        password: hashedPassword,
+        fullName: "Royal King Admin",
+        mobile: "+91 99940 77798",
+        role: "admin"
+      });
+      await defaultAdmin.save();
+      console.log("[MongoDB] Default admin user created: admin@royalking.com / adminpassword123");
+    }
+  } catch (error) {
+    console.error("[MongoDB] Error seeding admin user:", error);
+  }
+}
+
+// Connect to MongoDB
+mongoose.connect(MONGODB_URI)
+  .then(async () => {
+    console.log(`[MongoDB] Connected successfully to database`);
+    await seedAdmin();
+  })
+  .catch((err) => {
+    console.error("[MongoDB] Connection error:", err.message);
+  });
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`[Server] Express server running on http://localhost:${PORT}`);
+});
