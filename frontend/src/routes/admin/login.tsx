@@ -100,7 +100,7 @@ function AdminLoginPage() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="admin@royalking.com"
+                placeholder="Enter the admin email id"
                 required
                 className="border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus-visible:ring-red-500/40"
               />

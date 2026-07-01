@@ -2,7 +2,7 @@
 const getToken = () => (typeof window !== "undefined" ? localStorage.getItem("auth_token") : null);
 
 // Basic API request helper
-async function apiRequest(method: string, path: string, body?: any) {
+async function apiRequest(method: string, path: string, body?: any, expectStatus?: number) {
   const token = getToken();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -19,7 +19,9 @@ async function apiRequest(method: string, path: string, body?: any) {
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || `Request failed with status ${res.status}`);
+    const err: any = new Error(errorData.message || `Request failed with status ${res.status}`);
+    err.status = res.status;
+    throw err;
   }
 
   return res.json();
@@ -205,13 +207,21 @@ const auth = {
     if (!token) return { data: { session: null }, error: null };
     try {
       const res = await apiRequest("GET", "/api/auth/session");
-      const profile = await apiRequest("GET", "/api/profiles/me");
-      if (res.session && res.session.user) {
-        res.session.user.user_metadata.role = profile.role;
+      // Profile fetch is non-fatal — don't let it kill the session
+      try {
+        const profile = await apiRequest("GET", "/api/profiles/me");
+        if (res.session && res.session.user) {
+          res.session.user.user_metadata.role = profile.role;
+        }
+      } catch (_profileErr) {
+        // Profile unavailable — session still valid
       }
       return { data: { session: res.session }, error: null };
     } catch (err: any) {
-      localStorage.removeItem("auth_token");
+      // Only clear token if it's actually invalid/expired (401), not on network errors
+      if (err.status === 401) {
+        localStorage.removeItem("auth_token");
+      }
       return { data: { session: null }, error: null };
     }
   },

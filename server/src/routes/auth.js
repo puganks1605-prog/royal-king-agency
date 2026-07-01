@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
+const JWT_SECRET = process.env.JWT_SECRET || "rki_fallback_secret_change_in_production_2024";
 
 // Helper to construct a Supabase-compatible session object
 const makeSession = (user, token) => {

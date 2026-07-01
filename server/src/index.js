@@ -13,11 +13,11 @@ import User from "./models/User.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load env variables — try project root .env first, then server/.env
-const rootEnvPath = path.resolve(__dirname, "../../.env");
-const serverEnvPath = path.resolve(__dirname, "../../server/.env");
-dotenv.config({ path: rootEnvPath });
+// Load env variables — server/.env first, then project root .env
+const serverEnvPath = path.resolve(__dirname, "../.env");   // c:\project\server\.env
+const rootEnvPath = path.resolve(__dirname, "../../.env");  // c:\project\.env
 dotenv.config({ path: serverEnvPath });
+dotenv.config({ path: rootEnvPath });
 dotenv.config(); // fallback: .env in cwd
 
 const app = express();
